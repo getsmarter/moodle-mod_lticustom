@@ -182,7 +182,7 @@ function lticustom_update_instance($lti, $mform) {
 function lticustom_delete_instance($id) {
     global $DB;
 
-    if (! $basiclti = $DB->get_record("lti", array("id" => $id))) {
+    if (! $basiclti = $DB->get_record("lticustom", array("id" => $id))) {
         return false;
     }
 
@@ -201,7 +201,7 @@ function lticustom_delete_instance($id) {
     \core_completion\api::update_completion_date_event($cm->id, 'lticustom', $id, null);
 
     // We must delete the module record after we delete the grade item.
-    return $DB->delete_records("lti", array("id" => $basiclti->id));
+    return $DB->delete_records("lticustom", array("id" => $basiclti->id));
 }
 
 /**

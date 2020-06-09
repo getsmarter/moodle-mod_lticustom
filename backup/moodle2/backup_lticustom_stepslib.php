@@ -64,7 +64,7 @@ class backup_lticustom_activity_structure_step extends backup_activity_structure
         $userinfo = $this->get_setting_value('userinfo');
 
         // Define each element separated.
-        $lti = new backup_nested_element('lti', array('id'), array(
+        $lti = new backup_nested_element('lticustom', array('id'), array(
             'name',
             'intro',
             'introformat',
@@ -92,7 +92,7 @@ class backup_lticustom_activity_structure_step extends backup_activity_structure
             )
         );
 
-        $ltitype = new backup_nested_element('ltitype', array('id'), array(
+        $ltitype = new backup_nested_element('lticustomtype', array('id'), array(
             'name',
             'baseurl',
             'tooldomain',
@@ -113,30 +113,30 @@ class backup_lticustom_activity_structure_step extends backup_activity_structure
             )
         );
 
-        $ltitypesconfigs = new backup_nested_element('ltitypesconfigs');
-        $ltitypesconfig  = new backup_nested_element('ltitypesconfig', array('id'), array(
+        $ltitypesconfigs = new backup_nested_element('lticustomtypesconfigs');
+        $ltitypesconfig  = new backup_nested_element('lticustomtypesconfig', array('id'), array(
                 'name',
                 'value',
             )
         );
-        $ltitypesconfigencrypted  = new backup_nested_element('ltitypesconfigencrypted', array('id'), array(
+        $ltitypesconfigencrypted  = new backup_nested_element('lticustomtypesconfigencrypted', array('id'), array(
                 'name',
                 new encrypted_final_element('value'),
             )
         );
 
-        $ltitoolproxy = new backup_nested_element('ltitoolproxy', array('id'));
+        $ltitoolproxy = new backup_nested_element('lticustomtoolproxy', array('id'));
 
-        $ltitoolsettings = new backup_nested_element('ltitoolsettings');
-        $ltitoolsetting  = new backup_nested_element('ltitoolsetting', array('id'), array(
+        $ltitoolsettings = new backup_nested_element('lticustomtoolsettings');
+        $ltitoolsetting  = new backup_nested_element('lticustomtoolsetting', array('id'), array(
                 'settings',
                 'timecreated',
                 'timemodified',
             )
         );
 
-        $ltisubmissions = new backup_nested_element('ltisubmissions');
-        $ltisubmission = new backup_nested_element('ltisubmission', array('id'), array(
+        $ltisubmissions = new backup_nested_element('lticustomsubmissions');
+        $ltisubmission = new backup_nested_element('lticustomsubmission', array('id'), array(
             'userid',
             'datesubmitted',
             'dateupdated',

@@ -3249,11 +3249,11 @@ function lticustom_post_launch_html($newparms, $endpoint, $debug=false) {
         $r .= "  //]]> \n";
         $r .= "</script>\n";
         $r .= "<a id=\"displayText\" href=\"javascript:basicltiDebugToggle();\">";
-        $r .= get_string("toggle_debug_data", "lti")."</a>\n";
+        $r .= get_string("toggle_debug_data", "lticustom")."</a>\n";
         $r .= "<div id=\"basicltiDebug\" style=\"display:none\">\n";
-        $r .= "<b>".get_string("basiclti_endpoint", "lti")."</b><br/>\n";
+        $r .= "<b>".get_string("basiclti_endpoint", "lticustom")."</b><br/>\n";
         $r .= $endpoint . "<br/>\n&nbsp;<br/>\n";
-        $r .= "<b>".get_string("basiclti_parameters", "lti")."</b><br/>\n";
+        $r .= "<b>".get_string("basiclti_parameters", "lticustom")."</b><br/>\n";
         foreach ($newparms as $key => $value) {
             $key = htmlspecialchars($key);
             $value = htmlspecialchars($value);

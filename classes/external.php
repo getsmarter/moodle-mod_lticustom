@@ -295,7 +295,7 @@ class mod_lticustom_external extends external_api {
 
             // Get the ltis in this course, this function checks users visibility permissions.
             // We can avoid then additional validate_context calls.
-            $ltis = get_all_instances_in_courses("lti", $courses);
+            $ltis = get_all_instances_in_courses("lticustom", $courses);
 
             foreach ($ltis as $lti) {
 

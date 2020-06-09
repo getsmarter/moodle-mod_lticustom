@@ -80,11 +80,11 @@ class backup_lticustom_activity_task extends backup_activity_task {
 
         // Link to the list of basiclti tools.
         $search = "/(".$base."\/mod\/lticustom\/index.php\?id\=)([0-9]+)/";
-        $content = preg_replace($search, '$@LTIINDEX*$2@$', $content);
+        $content = preg_replace($search, '$@LTICUSTOMINDEX*$2@$', $content);
 
         // Link to basiclti view by moduleid.
         $search = "/(".$base."\/mod\/lticustom\/view.php\?id\=)([0-9]+)/";
-        $content = preg_replace($search, '$@LTIVIEWBYID*$2@$', $content);
+        $content = preg_replace($search, '$@LTICUSTOMVIEWBYID*$2@$', $content);
 
         return $content;
     }
