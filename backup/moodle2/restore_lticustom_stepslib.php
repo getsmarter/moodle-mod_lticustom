@@ -62,17 +62,17 @@ class restore_lticustom_activity_structure_step extends restore_activity_structu
         // To know if we are including userinfo.
         $userinfo = $this->get_setting_value('userinfo');
 
-        $lti = new restore_path_element('lti', '/activity/lticustom');
+        $lti = new restore_path_element('lticustom', '/activity/lticustom');
         $paths[] = $lti;
-        $paths[] = new restore_path_element('ltitype', '/activity/lticustom/ltitype');
-        $paths[] = new restore_path_element('ltitypesconfig', '/activity/lticustom/ltitype/ltitypesconfigs/ltitypesconfig');
-        $paths[] = new restore_path_element('ltitypesconfigencrypted',
-            '/activity/lticustom/ltitype/ltitypesconfigs/ltitypesconfigencrypted');
-        $paths[] = new restore_path_element('ltitoolproxy', '/activity/lticustom/ltitype/ltitoolproxy');
-        $paths[] = new restore_path_element('ltitoolsetting', '/activity/lticustom/ltitype/ltitoolproxy/ltitoolsettings/ltitoolsetting');
+        $paths[] = new restore_path_element('lticustomtype', '/activity/lticustom/lticustomtype');
+        $paths[] = new restore_path_element('lticustomtypesconfig', '/activity/lticustom/lticustomtype/lticustomtypesconfigs/lticustomtypesconfig');
+        $paths[] = new restore_path_element('lticustomtypesconfigencrypted',
+            '/activity/lticustom/lticustomtype/lticustomtypesconfigs/lticustomtypesconfigencrypted');
+        $paths[] = new restore_path_element('lticustomtoolproxy', '/activity/lticustom/lticustomtype/lticustomtoolproxy');
+        $paths[] = new restore_path_element('lticustomtoolsetting', '/activity/lticustom/lticustomtype/lticustomtoolproxy/lticustomtoolsettings/lticustomtoolsetting');
 
         if ($userinfo) {
-            $submission = new restore_path_element('ltisubmission', '/activity/lticustom/ltisubmissions/ltisubmission');
+            $submission = new restore_path_element('lticustomsubmission', '/activity/lticustom/lticustomsubmissions/lticustomsubmission');
             $paths[] = $submission;
         }
 
@@ -84,7 +84,7 @@ class restore_lticustom_activity_structure_step extends restore_activity_structu
         return $this->prepare_activity_structure($paths);
     }
 
-    protected function process_lti($data) {
+    protected function process_lticustom($data) {
         global $DB;
 
         $data = (object)$data;
@@ -116,7 +116,7 @@ class restore_lticustom_activity_structure_step extends restore_activity_structu
      * @param mixed $data The data from backup XML file
      * @return void
      */
-    protected function process_ltitype($data) {
+    protected function process_lticustomtype($data) {
         global $DB, $USER;
 
         $data = (object)$data;
@@ -136,7 +136,7 @@ class restore_lticustom_activity_structure_step extends restore_activity_structu
             unset($data->toolproxyid); // Course tools can not use LTI2.
             $ltitypeid = $DB->insert_record('lticustom_types', $data);
             $this->newltitype = true;
-            $this->set_mapping('ltitype', $oldid, $ltitypeid);
+            $this->set_mapping('lticustomtype', $oldid, $ltitypeid);
         }
 
         // Add the typeid entry back to LTI module.
@@ -150,7 +150,7 @@ class restore_lticustom_activity_structure_step extends restore_activity_structu
      */
     protected function find_existing_lti_type($data) {
         global $DB;
-        if ($ltitypeid = $this->get_mappingid('ltitype', $data->id)) {
+        if ($ltitypeid = $this->get_mappingid('lticustomtype', $data->id)) {
             return $ltitypeid;
         }
 
@@ -161,7 +161,7 @@ class restore_lticustom_activity_structure_step extends restore_activity_structu
             $sql = 'id = :id AND course = :course';
             $sql .= ($data->toolproxyid) ? ' AND toolproxyid = :toolproxyid' : ' AND toolproxyid IS NULL';
             if ($DB->record_exists_select('lticustom_types', $sql, $params)) {
-                $this->set_mapping('ltitype', $data->id, $data->id);
+                $this->set_mapping('lticustomtype', $data->id, $data->id);
                 if ($data->toolproxyid) {
                     $this->set_mapping('ltitoolproxy', $data->toolproxyid, $data->toolproxyid);
                 }
@@ -182,7 +182,7 @@ class restore_lticustom_activity_structure_step extends restore_activity_structu
            WHERE ' . $DB->sql_compare_text('baseurl', 255) . ' = ' . $DB->sql_compare_text(':baseurl', 255) . ' AND
                  course = :course AND name = :name AND toolproxyid IS NULL';
         if ($ltitype = $DB->get_record_sql($sql, $params, IGNORE_MULTIPLE)) {
-            $this->set_mapping('ltitype', $data->id, $ltitype->id);
+            $this->set_mapping('lticustomtype', $data->id, $ltitype->id);
             return $ltitype->id;
         }
 
@@ -193,11 +193,11 @@ class restore_lticustom_activity_structure_step extends restore_activity_structu
      * Process an lti config restore
      * @param mixed $data The data from backup XML file
      */
-    protected function process_ltitypesconfig($data) {
+    protected function process_lticustomtypesconfig($data) {
         global $DB;
 
         $data = (object)$data;
-        $data->typeid = $this->get_new_parentid('ltitype');
+        $data->typeid = $this->get_new_parentid('lticustomtype');
 
         // Only add configuration if the new lti_type was created.
         if ($data->typeid && $this->newltitype) {
@@ -212,11 +212,11 @@ class restore_lticustom_activity_structure_step extends restore_activity_structu
      * Process an lti config restore
      * @param mixed $data The data from backup XML file
      */
-    protected function process_ltitypesconfigencrypted($data) {
+    protected function process_lticustomtypesconfigencrypted($data) {
         global $DB;
 
         $data = (object)$data;
-        $data->typeid = $this->get_new_parentid('ltitype');
+        $data->typeid = $this->get_new_parentid('lticustomtype');
 
         // Only add configuration if the new lti_type was created.
         if ($data->typeid && $this->newltitype) {
@@ -232,7 +232,7 @@ class restore_lticustom_activity_structure_step extends restore_activity_structu
      * This method is empty because we actually process registration as part of process_ltitype()
      * @param mixed $data The data from backup XML file
      */
-    protected function process_ltitoolproxy($data) {
+    protected function process_lticustomtoolproxy($data) {
 
     }
 
@@ -240,11 +240,11 @@ class restore_lticustom_activity_structure_step extends restore_activity_structu
      * Process an lti tool registration settings restore (only settings for the current activity)
      * @param mixed $data The data from backup XML file
      */
-    protected function process_ltitoolsetting($data) {
+    protected function process_lticustomtoolsetting($data) {
         global $DB;
 
         $data = (object)$data;
-        $data->toolproxyid = $this->get_new_parentid('ltitoolproxy');
+        $data->toolproxyid = $this->get_new_parentid('lticustomtoolproxy');
 
         if (!$data->toolproxyid) {
             return;
@@ -259,7 +259,7 @@ class restore_lticustom_activity_structure_step extends restore_activity_structu
      * Process a submission restore
      * @param mixed $data The data from backup XML file
      */
-    protected function process_ltisubmission($data) {
+    protected function process_lticustomsubmission($data) {
         global $DB;
 
         $data = (object)$data;
@@ -275,7 +275,7 @@ class restore_lticustom_activity_structure_step extends restore_activity_structu
 
         $newitemid = $DB->insert_record('lticustom_submission', $data);
 
-        $this->set_mapping('ltisubmission', $oldid, $newitemid);
+        $this->set_mapping('lticustomsubmission', $oldid, $newitemid);
     }
 
     protected function after_execute() {
