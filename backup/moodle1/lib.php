@@ -50,7 +50,7 @@ class moodle1_mod_lticustom_handler extends moodle1_mod_handler {
 
         return array(
             new convert_path(
-                'basiclti', '/MOODLE_BACKUP/COURSE/MODULES/MOD/LTI'
+                'basiclticustom', '/MOODLE_BACKUP/COURSE/MODULES/MOD/LTICUSTOM'
             )
         );
 
@@ -60,7 +60,7 @@ class moodle1_mod_lticustom_handler extends moodle1_mod_handler {
      * This is executed every time we have one /MOODLE_BACKUP/COURSE/MODULES/MOD/LTI
      * data available
      */
-    public function process_basiclti($data) {
+    public function process_basiclticustom($data) {
         global $DB;
 
         // Get the course module id and context id.
@@ -81,7 +81,7 @@ class moodle1_mod_lticustom_handler extends moodle1_mod_handler {
         $this->open_xml_writer("activities/lticustom_{$this->moduleid}/lticustom.xml");
         $this->xmlwriter->begin_tag('activity', array('id' => $instanceid, 'moduleid' => $this->moduleid,
                 'modulename' => 'lticustom', 'contextid' => $contextid));
-        $this->xmlwriter->begin_tag('lti', array('id' => $instanceid));
+        $this->xmlwriter->begin_tag('lticustom', array('id' => $instanceid));
 
         $ignorefields = array('id', 'modtype');
         if (!$DB->record_exists('lticustom_types', array('id' => $data['typeid']))) {
@@ -126,9 +126,9 @@ class moodle1_mod_lticustom_handler extends moodle1_mod_handler {
     /**
      * This is executed when we reach the closing </MOD> tag of our 'lti' path
      */
-    public function on_basiclti_end() {
+    public function on_basiclticustom_end() {
         // Finish writing basiclti.xml.
-        $this->xmlwriter->end_tag('lti');
+        $this->xmlwriter->end_tag('lticustom');
         $this->xmlwriter->end_tag('activity');
         $this->close_xml_writer();
 
